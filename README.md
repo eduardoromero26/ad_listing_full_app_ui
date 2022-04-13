@@ -1,16 +1,49 @@
-# myapp
+# Login
+## Screenshot
 
-A new Flutter project.
+![Login](assets/screenshots/login.png)
 
-## Getting Started
+# Register
+## Screenshot
 
-This project is a starting point for a Flutter application.
+![register](assets/screenshots/register.png)
 
-A few resources to get you started if this is your first Flutter project:
+# Home
+## Screenshot
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![Home](assets/screenshots/home.png)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Edit Profile
+## Screenshot
+
+![Edit Profile](assets/screenshots/editProfile.png)
+
+# My Ads
+## Screenshot
+
+![My Ads](assets/screenshots/myAds.png)
+
+# Create Ad
+## Screenshot
+
+![Create AD](assets/screenshots/createAd.png)
+
+# Edit Ad
+## Screenshot
+
+![Edit Ad](assets/screenshots/editAd.png)
+
+# Product Detail
+## Screenshot
+
+![Product Detail](assets/screenshots/productDetail.png)
+
+# Imagen Detail
+## Screenshot
+
+![Imagen Detail](assets/screenshots/imageDetail.png)
+
+# Settings
+## Screenshot
+
+![Settings](assets/screenshots/settings.png)
