@@ -3,14 +3,13 @@ import 'package:project_name/screens/EditAdd.dart';
 import 'package:project_name/screens/MyAds.dart';
 import 'package:project_name/screens/Settings.dart';
 import 'package:project_name/screens/editProfile.dart';
-//import 'package:project_name/screens/AddNewMusic.dart';
-//import 'package:project_name/screens/MyMusic.dart';
 import 'package:project_name/screens/home.dart';
-//import 'package:project_name/screens/login.dart';
 import 'package:get/get.dart';
 import 'package:project_name/screens/login.dart';
+import 'package:get_storage/get_storage.dart';
 
-void main() {
+void main() async {
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: EditAddScreen(),
+      home: LoginScreen(),
     );
   }
 }
@@ -31,8 +30,6 @@ class AppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-       
-    );
+    return Container();
   }
 }

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:project_name/screens/home.dart';
 import 'package:project_name/screens/signup.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:project_name/util/constants.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -10,6 +16,30 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailCtrl = TextEditingController();
+  final TextEditingController _passwordCtrl = TextEditingController();
+  final box = GetStorage();
+
+  login() async {
+    print(_emailCtrl.text);
+    print(_passwordCtrl.text);
+    var resp = await http.post(
+      Uri.parse(Constants().apiURL + "/auth/login"),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        "email": _emailCtrl.text,
+        "password": _passwordCtrl.text,
+      }),
+    );
+    print(json.decode(resp.body));
+    var tmp = json.decode(resp.body);
+    if (tmp["status"] == true) {
+      print(tmp["data"]["token"]);
+      box.write('token', tmp["data"]["token"]);
+      Get.offAll(const HomeScreen());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -50,8 +80,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(
                           height: 8,
                         ),
-                        const TextField(
-                          decoration: InputDecoration(
+                        TextField(
+                          controller: _emailCtrl,
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Email',
                           ),
@@ -59,9 +90,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(
                           height: 12,
                         ),
-                        const TextField(
+                        TextField(
+                          controller: _passwordCtrl,
                           obscureText: true,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Password',
                           ),
@@ -74,14 +106,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 60,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.orange[800] ,
+                              primary: Colors.orange[800],
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const HomeScreen()));
+                              login();
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

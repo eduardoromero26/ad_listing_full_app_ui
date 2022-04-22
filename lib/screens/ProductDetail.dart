@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import 'detailImage.dart';
-// import 'package:project_name/screens/MyMusic.dart';
-// import 'package:project_name/custom-widgets/MyMusicWidget.dart';
-// import 'package:project_name/screens/SingleImageSong.dart';
 
 double _value = 0.0;
 
@@ -28,7 +24,7 @@ class ProductDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(SingleImageSongScreen(
+        Get.to(DetailImageScreen(
           SingleImageURL: detailImageURL,
         ));
       },
@@ -38,9 +34,7 @@ class ProductDetailScreen extends StatelessWidget {
         ),
         // ignore: avoid_unnecessary_containers
         body: Container(
-          margin: const EdgeInsets.symmetric(
-            vertical: 8
-          ),
+          margin: const EdgeInsets.symmetric(vertical: 8),
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,10 +94,12 @@ class ProductDetailScreen extends StatelessWidget {
                 height: 8,
               ),
               Container(
-                child: Text(detailDescription,
-                style: const TextStyle(
-                  fontSize: 18,
-                ),),
+                child: Text(
+                  detailDescription,
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 24,
