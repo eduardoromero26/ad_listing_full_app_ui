@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:project_name/controllers/auth.dart';
+
 import 'package:project_name/screens/home.dart';
-import 'package:project_name/screens/signup.dart';
+import 'package:project_name/screens/register.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -10,6 +15,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController _emailCtrl = TextEditingController();
+  TextEditingController _passwordCtrl = TextEditingController();
+  AuthController _auth = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,11 +39,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           fit: BoxFit.fitWidth,
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 240,
                         height: 160,
                         child: Image.asset("assets/images/logo.png"),
                       ),
+                      SizedBox(
+                        height: 200,
+                      )
                     ],
                   )),
               Expanded(
@@ -50,8 +62,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(
                           height: 8,
                         ),
-                        const TextField(
-                          decoration: InputDecoration(
+                        TextField(
+                          controller: _emailCtrl,
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Email',
                           ),
@@ -59,29 +72,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(
                           height: 12,
                         ),
-                        const TextField(
+                        TextField(
+                          controller: _passwordCtrl,
                           obscureText: true,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Password',
                           ),
                         ),
                         const SizedBox(
-                          height: 32,
+                          height: 100,
                         ),
-                        Container(
+                        SizedBox(
                           width: 360,
-                          height: 60,
+                          height: 52,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.orange[800] ,
+                              primary: Colors.orange[800],
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const HomeScreen()));
+                             _auth.loginWithEmailPassword(_emailCtrl.text, _passwordCtrl.text);
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -99,6 +109,31 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         Container(
+                          height: 12,
+                        ),
+                        SizedBox(
+                          width: 360,
+                          height: 52,
+                          child: ElevatedButton(
+                            onPressed: () {
+                               _auth.loginWithGoogle();
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: const [
+                                Text(
+                                  "Login with Google",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
                           width: 360,
                           height: 60,
                           child: TextButton(
@@ -106,11 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               primary: Colors.orange[800],
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SignupScreen()));
+                              Get.to(const registerScreen());
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

@@ -13,7 +13,7 @@ class EditAddScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Create Ad"),
+          title: const Text("Edit Ad"),
           centerTitle: true,
           backgroundColor: Colors.black,
         ),

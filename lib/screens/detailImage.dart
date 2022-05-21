@@ -18,7 +18,7 @@ class SingleImageSongScreen extends StatelessWidget {
       // ignore: avoid_unnecessary_containers
       body: Center(
         child: Container(
-          child: Image.asset(
+          child: Image.network(
             SingleImageURL,
             height: 320,
             width: double.infinity,

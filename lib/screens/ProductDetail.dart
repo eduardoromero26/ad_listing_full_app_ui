@@ -70,7 +70,7 @@ class ProductDetailScreen extends StatelessWidget {
               Container(
                   height: 200,
                   width: double.infinity,
-                  child: Image.asset(detailImageURL, fit: BoxFit.cover)),
+                  child: Image.network(detailImageURL, fit: BoxFit.cover)),
               Container(
                 margin: const EdgeInsets.symmetric(
                   vertical: 8,

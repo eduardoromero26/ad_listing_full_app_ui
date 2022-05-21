@@ -37,10 +37,10 @@ class ProductCardWidget extends StatelessWidget {
           Container(
               height: double.infinity,
               width: double.infinity,
-              child: Image.asset(
+              child: Image.network(
                 imageURL,
                 fit: BoxFit.cover,
-              )),
+              ),),
           Container(
             height: 68,
             width: double.infinity,

@@ -1,15 +1,49 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:project_name/screens/home.dart';
 import 'package:project_name/screens/login.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+class registerScreen extends StatefulWidget {
+  const registerScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignupScreen> createState() => _LoginScreenState();
+  State<registerScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<SignupScreen> {
+class _RegisterScreenState extends State<registerScreen> {
+  TextEditingController _nameCtrl = TextEditingController();
+  TextEditingController _emailCtrl = TextEditingController();
+  TextEditingController _mobileCtrl = TextEditingController();
+  TextEditingController _passwordCtrl = TextEditingController();
+
+  register() {
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+      email: _emailCtrl.text,
+      password: _passwordCtrl.text,
+    )
+        .then((value) {
+      print("Login Success");
+      insertToFirestore();
+      Get.to(HomeScreen());
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  insertToFirestore() {
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance.collection("accounts").doc(uid).set({
+      "uid": FirebaseAuth.instance.currentUser!.uid,
+      "displayName": _nameCtrl.text,
+      "email": _emailCtrl.text,
+      "mobile": _mobileCtrl.text,
+      "createdAt": FieldValue.serverTimestamp()
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -50,8 +84,9 @@ class _LoginScreenState extends State<SignupScreen> {
                         const SizedBox(
                           height: 8,
                         ),
-                        const TextField(
-                          decoration: InputDecoration(
+                        TextField(
+                          controller: _nameCtrl,
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Full Name',
                           ),
@@ -59,9 +94,10 @@ class _LoginScreenState extends State<SignupScreen> {
                         const SizedBox(
                           height: 8,
                         ),
-                        const TextField(
+                        TextField(
+                          controller: _emailCtrl,
                           obscureText: false,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Email Adress',
                           ),
@@ -69,19 +105,21 @@ class _LoginScreenState extends State<SignupScreen> {
                         const SizedBox(
                           height: 8,
                         ),
-                        const TextField(
+                        TextField(
+                          controller: _mobileCtrl,
                           obscureText: false,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
+                          decoration: const InputDecoration(
+                            border: const OutlineInputBorder(),
                             labelText: 'Mobile Number',
                           ),
                         ),
                         const SizedBox(
                           height: 8,
                         ),
-                        const TextField(
+                        TextField(
+                          controller: _passwordCtrl,
                           obscureText: true,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Password',
                           ),
@@ -97,11 +135,7 @@ class _LoginScreenState extends State<SignupScreen> {
                               primary: Colors.orange[800],
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const HomeScreen()));
+                              register();
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

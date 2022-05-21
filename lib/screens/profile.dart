@@ -1,11 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:project_name/screens/home.dart';
 import 'package:project_name/screens/login.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
-class editProfileScreen extends StatelessWidget {
-  const editProfileScreen({
-    Key? key,
-  }) : super(key: key);
+class MyProfileScreen extends StatefulWidget {
+  const MyProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MyProfileScreen> createState() => _MyProfileScreenState();
+}
+
+class _MyProfileScreenState extends State<MyProfileScreen> {
+  var userObj = {};
+  final TextEditingController _nameCtrl = TextEditingController();
+  final TextEditingController _emailCtrl = TextEditingController();
+  final TextEditingController _mobileCtrl = TextEditingController();
+
+  getUserData() {
+    FirebaseFirestore.instance
+        .collection("accounts")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((res) {
+      setState(
+        () {
+          userObj = {"id": res.id, ...res.data()!};
+          _nameCtrl.text = userObj['displayName'];
+          _emailCtrl.text = userObj['email'];
+          _mobileCtrl.text = userObj['mobile'];
+        },
+      );
+    });
+  }
+
+  updateProfile() {
+    FirebaseFirestore.instance
+        .collection("accounts")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      "displayName": _nameCtrl.text,
+      "mobile": _mobileCtrl.text,
+      "email": _emailCtrl.text
+    });
+    Get.offAll(HomeScreen());
+  }
+
+   void logout() {
+    FirebaseAuth.instance.signOut().then((value) {
+      Get.offAll(const LoginScreen());
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +86,19 @@ class editProfileScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+              TextField(
+                controller: _nameCtrl,
+                decoration: const InputDecoration(
+                  border: const OutlineInputBorder(),
                   labelText: 'Name',
                 ),
               ),
               const SizedBox(
                 height: 16,
               ),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _emailCtrl,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Email',
                 ),
@@ -52,11 +106,11 @@ class editProfileScreen extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              const TextField(
-                obscureText: true,
-                decoration: InputDecoration(
+              TextField(
+                controller: _mobileCtrl,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Password',
+                  labelText: 'Mobile',
                 ),
               ),
               const SizedBox(
@@ -70,10 +124,7 @@ class editProfileScreen extends StatelessWidget {
                     primary: Colors.orange[800],
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomeScreen()));
+                    updateProfile();
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -90,7 +141,7 @@ class editProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4,
               ),
               Container(
@@ -101,10 +152,7 @@ class editProfileScreen extends StatelessWidget {
                     primary: Colors.orange[900],
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginScreen()));
+                    logout();
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
