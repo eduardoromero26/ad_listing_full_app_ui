@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:project_name/screens/ProductDetail.dart';
 
 class ProductCardWidget extends StatelessWidget {
-  var objApi;
+  var objApi = {};
 
   ProductCardWidget({
     Key? key,

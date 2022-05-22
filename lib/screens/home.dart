@@ -36,31 +36,32 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(
         () {
           userObj = {"id": res.id, ...res.data()!};
-          _nameCtrl.text = userObj['displayName'];
-          _emailCtrl.text = userObj['email'];
-          _mobileCtrl.text = userObj['mobile'];
+          _profileImage = userObj['imageURL'];
         },
       );
     });
   }
-
+/*
   getAdsData() {
-    while (FirebaseFirestore.instance.collection != null) {
-      FirebaseFirestore.instance.collection("ads").doc().get().then((res) {
-        setState(
-          () {
-            _adTitleCtrl.text = userObj['displayName'];
-            _adPriceCtrl.text = userObj['price'];
-            _adImageAdCtrl.text = userObj['imageURL'];
-            adsObj = userObj;
-          },
-        );
-      });
-    }
-  }
+    FirebaseFirestore.instance
+        .collection("ads")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((res) {
+      setState(
+        () {
+          adsObj = {"id": res.id, ...res.data()!};
 
+          _adTitleCtrl.text = userObj['displayName'];
+          _adPriceCtrl.text = userObj['price'];
+          _adImageAdCtrl.text = userObj['imageURL'];
+        },
+      );
+    });
+  }
+*/
   Future getAdsLoadingController() async {
-    var resp = await getAdsData();
+    var resp = await getUserData();
     if (resp != "Error") {
       setState(() {
         isLoading = false;
@@ -74,9 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    getUserData();
     getAdsLoadingController();
-    print(" ${userObj} sOY uSER obj");
     super.initState();
   }
 
