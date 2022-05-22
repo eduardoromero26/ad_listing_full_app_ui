@@ -53,6 +53,9 @@ class AuthController extends GetxController {
         "createdAt": FieldValue.serverTimestamp()
       });
     }
+    if (userRef.user != null) {
+      Get.offAll(HomeScreen());
+    }
   }
 
   void logout() {

@@ -1,23 +1,13 @@
-// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:project_name/screens/ProductDetail.dart';
-//import 'package:get/get.dart';
-//import 'package:project_name/screens/product-detail.dart';
 
 class ProductCardWidget extends StatelessWidget {
-  final String productName;
-  final String price;
-  final String imageURL;
-  final String description;
+  var objApi;
 
-  const ProductCardWidget({
+  ProductCardWidget({
     Key? key,
-    required this.productName,
-    required this.price,
-    required this.imageURL,
-    required this.description,
+    required this.objApi,
   }) : super(key: key);
 
   @override
@@ -25,10 +15,7 @@ class ProductCardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.to(ProductDetailScreen(
-          detailProductName: productName,
-          detailPrice: price,
-          detailImageURL: imageURL,
-          detailDescription: description,
+          objApi: objApi,
         ));
       },
       child: Stack(
@@ -38,9 +25,9 @@ class ProductCardWidget extends StatelessWidget {
               height: double.infinity,
               width: double.infinity,
               child: Image.network(
-                imageURL,
+                objApi['images'][0],
                 fit: BoxFit.cover,
-              ),),
+              )),
           Container(
             height: 68,
             width: double.infinity,
@@ -50,18 +37,17 @@ class ProductCardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  productName,
+                  objApi['title'],
                   style: const TextStyle(
                     color: Colors.white,
                   ),
                 ),
                 Text(
-                  price,
+                  objApi['price'].toString(),
                   style: TextStyle(
                     color: Colors.orange[800],
                   ),
                 ),
-                
               ],
             ),
           )

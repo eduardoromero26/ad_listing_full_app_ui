@@ -17,6 +17,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   var userObj = {};
+  var _imageURL = "";
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _mobileCtrl = TextEditingController();
@@ -33,6 +34,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _nameCtrl.text = userObj['displayName'];
           _emailCtrl.text = userObj['email'];
           _mobileCtrl.text = userObj['mobile'];
+          _imageURL = userObj['imageURL'];
         },
       );
     });
@@ -74,8 +76,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         CircleAvatar(
                           backgroundColor: Colors.black,
-                          backgroundImage: const AssetImage(
-                            'assets/images/profile_image.jpg',
+                          backgroundImage: NetworkImage(
+                            _imageURL,
                           ),
                         ),
                         const SizedBox(
@@ -133,9 +135,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     width: 20,
                   ),
                   TextButton(
-                      onPressed: () {
-                        
-                      },
+                      onPressed: () {},
                       child: const Text(
                         "My Ads",
                         style: const TextStyle(color: Colors.black),

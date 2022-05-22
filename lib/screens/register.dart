@@ -40,7 +40,8 @@ class _RegisterScreenState extends State<registerScreen> {
       "displayName": _nameCtrl.text,
       "email": _emailCtrl.text,
       "mobile": _mobileCtrl.text,
-      "createdAt": FieldValue.serverTimestamp()
+      "createdAt": FieldValue.serverTimestamp(),
+      "imageURL": "https://picsum.photos/200/300",
     });
   }
 

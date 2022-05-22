@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 //import 'package:project_name/custom-widgets/MyMusicWidget.dart';
 
 // ignore: camel_case_types
-class SingleImageSongScreen extends StatelessWidget {
+class SingleImageScreen extends StatelessWidget {
   final String SingleImageURL;
 
-  const SingleImageSongScreen({
+  const SingleImageScreen({
     Key? key,
     required this.SingleImageURL,
   }) : super(key: key);

@@ -1,9 +1,17 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:project_name/screens/home.dart';
 import 'package:project_name/screens/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:project_name/controllers/auth.dart';
+import 'package:project_name/controllers/profile.dart';
 
 class MyProfileScreen extends StatefulWidget {
   const MyProfileScreen({Key? key}) : super(key: key);
@@ -14,9 +22,19 @@ class MyProfileScreen extends StatefulWidget {
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
   var userObj = {};
+  var _imageURL = "https://picsum.photos/200/300";
+  final ProfileController _profileCtrl = Get.put(ProfileController());
+  final AuthController _authCtrl = AuthController();
+
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _mobileCtrl = TextEditingController();
+
+  var _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random _rnd = Random();
+
+  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
   getUserData() {
     FirebaseFirestore.instance
@@ -35,6 +53,26 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     });
   }
 
+  uploadImage() async {
+    var filePath = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (filePath!.path.length != 0) {
+      File file = File(filePath.path);
+      var storageRef = await FirebaseStorage.instance
+          .ref()
+          .child("uploads")
+          .child(getRandomString(12))
+          .putFile(file);
+
+      var uploadedURL = await storageRef.ref.getDownloadURL();
+      print(uploadedURL);
+      setState(() {
+        _imageURL = uploadedURL;
+      });
+      _profileCtrl.updateProfile({"imageURL": _imageURL});
+    }
+  }
+
+
   updateProfile() {
     FirebaseFirestore.instance
         .collection("accounts")
@@ -47,7 +85,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     Get.offAll(HomeScreen());
   }
 
-   void logout() {
+  void logout() {
     FirebaseAuth.instance.signOut().then((value) {
       Get.offAll(const LoginScreen());
     });
@@ -73,12 +111,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           child: ListView(
             children: [
               Center(
-                child: Container(
-                  height: 100,
-                  width: 100,
-                  child: const CircleAvatar(
-                    backgroundImage: const AssetImage(
-                      'assets/images/profile_image.jpg',
+                child: GestureDetector(
+                  onTap: () {
+                    uploadImage();
+                  },
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        _imageURL,
+                      ),
                     ),
                   ),
                 ),
